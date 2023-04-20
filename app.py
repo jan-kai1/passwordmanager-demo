@@ -12,7 +12,7 @@ import html
 secretkey = os.urandom(12)
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://passwordmanager_szjd_user:yLAh4ZUQEA2pChUyouXOznbXHHqeXvxf@dpg-cgfsi482qv28tc10qprg-a.singapore-postgres.render.com/passwordmanager_szjd"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.permanent_session_lifetime = timedelta(hours=2)
 app.secret_key = secretkey
