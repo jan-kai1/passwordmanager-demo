@@ -253,9 +253,7 @@ def main():
 
 
 
-    @app.route("/error")
-    def error():
-        return("there was an error")
+    return app()
 
 
     if __name__ == "__main__":
