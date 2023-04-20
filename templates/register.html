@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+
+Register an account!
+{% endblock %}
+
+{% block main %}
+<div class = "text-center">
+    <p>Make sure to set a <b>SECURE</b> password!</p>
+</div>
+<form method = "post">
+    <input type = "text" name = "username" placeholder="Username?" autofocus autocomplete = "off">
+    <input type = "password" name = "password" placeholder = "Password" autocomplete = "off">
+    <input type = "password" name  = "confirmation" placeholder = "Re-enter Password" automcompete = "off">
+    <button type = "submit">Register your account!</button>
+
+</form>
+
+
+{% if existing %}
+<p>{{existing}} already exists!</p>
+{% endif %}
+{% endblock %}

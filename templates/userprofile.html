@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<script>
+// usee {list|length in jinjja to get no of items in a list
+var listlength = "{{ userprofiles|length }}";
+console.log(`listlength = ${listlength}`)
+//make list of strings that of all password?
+//use single quotation, double quotation causes problems as json.dumps passes strings inside "" |safe to stop flask from escaping characters
+const passwordlist = JSON.parse('{{ passwordlist|safe }}');
+console.log(passwordlist)
+document.addEventListener("DOMContentLoaded", function()
+{   let buttonlist = [];
+   
+    
+    for (i=0; i<listlength; i++)
+    {
+        //create variable for each button created
+        console.log(`checking for button${i}`)
+        button = document.querySelector(`#button${i}`);
+        if (button)
+        {
+            buttonlist.push(button);
+        }
+        else
+        {
+            console.log('button not exist')
+        }
+    }
+    //MAKE SURE TO USE LET, DECLARES A SEPARATE J variable for EACH ITERATION OF THE LOOP
+    //NOT USING LET CREATES A GLOBAL VARIABLE, LEADING TO THE MAXIMUM NUMBER ALWAYS BEING SELECTED AFTER THE DOCUMENT IS GENERATED
+    for (let j=0; j < buttonlist.length; j++)
+    {   
+        
+        console.log(`adding listener for button${j}`)
+        buttonlist[j].value = j
+        buttonlist[j].addEventListener("click", function()
+        {
+            //copy the value of the corresponding detail tag
+            //undefined copied TODO FIX
+            // always will choose the highest number j, have to make it select the corresponding value
+            
+            navigator.clipboard.writeText(passwordlist[j]);
+            console.log(`button no ${j}`)
+            console.log(passwordlist);
+            
+
+
+        });
+    }
+});
+
+</script>
+<!--Display all users passwords-->
+<!-- Use a list-->
+<h1 class = "Display 4">Saved Passwords for {{ session['user'] }}</h3>
+<div class = "container-fluid" >
+    <div class = "row">
+        <ul class = "list-group list-group-horizontal-md flex-wrap">
+            <li class = "list-group-item flex-fill">Website</li>
+            <li class = "list-group-item flex-fill">Password</li>
+            <li class = "list-group-item flex-fill">Copy To Clipboard</li>
+            <li class = "list-group-item flex-fill">Delete Password</li>
+            <li class = "list-group-item flex-fill">Change Password</li>
+        </ul>
+    </div>
+        <!--go over each profile in userpasswords-->
+        {% for profile in userprofiles %}
+        <p>
+            <ul class = "list-group list-group-horizontal-md flex-wrap">
+                <!-- One list group horizontal line for each profile-->
+                <li class = "list-group-item flex-fill flex-grow-1">{{ profile[0] }}</li>
+                <li class = "list-group-item flex-fill flex-grow-1">
+                    <details id = "password{{ loop.index0 }}" value = "{{ profile [1] }}">
+                        <summary>Password</summary>
+                        {{ profile[1] }}
+                    </details>
+                </li>
+                <!-- button to copy password-->
+                <li class = "list-group-item flex-fill flex-grow-1">
+                    <button type="button" id = "button{{ loop.index0 }}" >Copy password</button>
+                </li>
+                <!-- button to delete password-->
+                <li class = "list-group-item flex-fill flex-grow-1">
+                    <form method="POST">
+                        <button type = "submit" name = "form{{ loop.index }}" value = "{{ profile[1] }}">Delete password</button>
+                    </form>
+                </li>
+                <li class = "list-group-item flex-fill flex-grow-1">
+                    <form method = "POST">
+                        <input type = "text" autocomplete = "off" placeholder = "New Password?" name="newpassword">
+                        <button type = "submit" name = "formd{{ loop.index }}" value = "{{ profile[1] }}">Change Password</button>
+
+
+                    </form>
+                </li>
+            </ul>
+        </p>
+        {% endfor %}
+    
+</div>
+{% endblock %}

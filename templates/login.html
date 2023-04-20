@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}
+<div class = "text-center">
+    <p>Log into your Account</p>
+</div>
+<form method = "post">
+    <input type = "text" name = username placeholder="Username">
+    <input type = "password" name = "password" placeholder="Password">
+    <button type = "submit">Log In</button>
+</form>
+{% endblock %}
